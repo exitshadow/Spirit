@@ -32,7 +32,7 @@ MonoBehaviour:
     supportTransparentDepthPostpass: 1
     colorBufferFormat: 48
     supportCustomPass: 1
-    customBufferFormat: 12
+    customBufferFormat: 48
     supportedLitShaderMode: 2
     planarReflectionResolution:
       m_Values: 000100000004000000080000
@@ -115,8 +115,8 @@ MonoBehaviour:
       perChannelMask: 1
     postProcessSettings:
       m_LutSize: 32
-      lutFormat: 48
-      bufferFormat: 74
+      lutFormat: 52
+      bufferFormat: 52
     dynamicResolutionSettings:
       enabled: 0
       useMipBias: 0
