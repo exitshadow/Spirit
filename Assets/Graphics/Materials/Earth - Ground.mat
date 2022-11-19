@@ -13,6 +13,7 @@ Material:
   - _DISABLE_SSR_TRANSPARENT
   - _DISPLACEMENT_LOCK_TILING_SCALE
   - _ENABLE_FOG_ON_TRANSPARENT
+  - _HEIGHTMAP
   - _MASKMAP
   - _MATERIAL_FEATURE_SPECULAR_COLOR
   - _NORMALMAP
@@ -65,7 +66,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _HeightMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: e5344e6d48288994a8f233487e82b5a6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _IridescenceMaskMap:
@@ -131,7 +132,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AORemapMax: 0.6917497
-    - _AORemapMin: 0.29918402
+    - _AORemapMin: 0
     - _ATDistance: 1
     - _AddPrecomputedVelocity: 0
     - _AlbedoAffectEmissive: 0
@@ -202,8 +203,8 @@ Material:
     - _ReceivesSSRTransparent: 0
     - _RefractionModel: 0
     - _Smoothness: 0.5
-    - _SmoothnessRemapMax: 0.8186763
-    - _SmoothnessRemapMin: 0.43064368
+    - _SmoothnessRemapMax: 0.32271194
+    - _SmoothnessRemapMin: 0
     - _SpecularAAScreenSpaceVariance: 0.1
     - _SpecularAAThreshold: 0.2
     - _SpecularOcclusionMode: 1
