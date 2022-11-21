@@ -627,7 +627,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 236769291}
-  m_LocalRotation: {x: 0.43371657, y: 0.0039572786, z: -0.0019048428, w: 0.9010387}
+  m_LocalRotation: {x: 0.43371657, y: 0.0039572725, z: -0.0019048401, w: 0.90103865}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -827,7 +827,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771836194}
-  m_LocalRotation: {x: 0.48476383, y: 0.003841292, z: -0.0021290267, w: 0.8746341}
+  m_LocalRotation: {x: 0.48476383, y: 0.0038412972, z: -0.0021290295, w: 0.8746341}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -912,7 +912,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 947472496}
-  m_LocalRotation: {x: 0.4593453, y: 0.003901114, z: -0.0020174102, w: 0.88824695}
+  m_LocalRotation: {x: 0.4593453, y: 0.0039011196, z: -0.002017413, w: 0.88824695}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1677,7 +1677,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1543877256}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.43918228, y: 6180, z: -49.99807}
+  m_LocalPosition: {x: -0.43918294, y: 6180, z: -49.99807}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1951,8 +1951,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823688464}
-  m_LocalRotation: {x: 0.4593453, y: 0.0039011298, z: -0.0020174184, w: 0.88824695}
-  m_LocalPosition: {x: -0.43918228, y: 6180, z: -49.99807}
+  m_LocalRotation: {x: 0.4593453, y: 0.003901135, z: -0.0020174214, w: 0.88824695}
+  m_LocalPosition: {x: -0.43918294, y: 6180, z: -49.99807}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2512,7 +2512,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _snippetsList: {fileID: 11400000, guid: ad1befbe283f9c644a3b4347c3472a98, type: 2}
   _TMPFieldToFill: {fileID: 1602218253}
-  _timeToWaitBeforeStart: 2
+  _timeToWaitBeforeStart: 5
   _fadingTimeIn: 0.3
   _fadingTimeOut: 0.3
 --- !u!1001 &2464818047654737657
@@ -2537,6 +2537,16 @@ PrefabInstance:
       propertyPath: _nuke
       value: 
       objectReference: {fileID: 2464818047654737660}
+    - target: {fileID: 2464818047911473152, guid: 4885cbe2cd50b644cbe7afea36b690d6,
+        type: 3}
+      propertyPath: _speed
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 2464818047911473152, guid: 4885cbe2cd50b644cbe7afea36b690d6,
+        type: 3}
+      propertyPath: _rotationTarget
+      value: 
+      objectReference: {fileID: 1345470026}
     - target: {fileID: 2464818047911473153, guid: 4885cbe2cd50b644cbe7afea36b690d6,
         type: 3}
       propertyPath: m_Camera

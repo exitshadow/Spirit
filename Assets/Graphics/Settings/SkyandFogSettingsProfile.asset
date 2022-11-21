@@ -160,17 +160,17 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   nearFocusStart:
-    m_OverrideState: 1
-    m_Value: 0
+    m_OverrideState: 0
+    m_Value: 2.33
   nearFocusEnd:
-    m_OverrideState: 1
-    m_Value: 9.99999
+    m_OverrideState: 0
+    m_Value: 2.33001
   farFocusStart:
     m_OverrideState: 1
-    m_Value: 10000
+    m_Value: 5000
   farFocusEnd:
     m_OverrideState: 1
-    m_Value: 40000
+    m_Value: 10000
   m_NearSampleCount:
     m_OverrideState: 1
     m_Value: 5
