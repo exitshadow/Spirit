@@ -7,11 +7,12 @@ using UnityEngine.Events;
 public class Nuke : MonoBehaviour
 {
     public UnityEvent Boom;
+    [SerializeField] private float _earthSurfaceRadius = 6000;
     private bool hasLanded = false;
 
     private void Update()
     {
-        if (transform.position.y < 10 && !hasLanded) {
+        if (transform.position.y < _earthSurfaceRadius && !hasLanded) {
             hasLanded = true;
             Debug.Log("Boom");
             Boom?.Invoke();
