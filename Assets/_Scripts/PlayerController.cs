@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
         
         Orbit();
         Steer();
-        //Tilt();
+        Tilt();
     }
 
     private void Orbit()
@@ -145,13 +145,11 @@ public class PlayerController : MonoBehaviour
         if (move.IsInProgress() && direction.y != 0)
         {
             float t;
-            if (direction.y > 0)
-                t = _tiltingCurveIn.Evaluate(direction.y);
-            else
-                t = - _tiltingCurveIn.Evaluate(-direction.y);
-
             accelerationTime.y += Time.fixedDeltaTime * .3f;
-            tilting = t * _tiltingSpeed * accelerationTime.y;
+
+            t = _tiltingCurveIn.Evaluate(accelerationTime.y);
+
+            tilting = direction.y * _tiltingSpeed * t;
 
             if ((rotX <= 360 - _maxFrontalAngle && rotX > 180) || (rotX >= _maxFrontalAngle && rotX < 180))
             {
