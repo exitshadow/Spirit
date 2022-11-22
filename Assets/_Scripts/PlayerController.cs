@@ -32,6 +32,10 @@ public class PlayerController : MonoBehaviour
     private float steering;
     private float tilting;
 
+// todo
+//  replace simple multipliers with animation curves
+//  for a better feel in the inputs uwu
+
     public void Nuke()
     {
         if (_nuke != null)
