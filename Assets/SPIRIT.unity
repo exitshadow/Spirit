@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 1121.884, g: 1294.6992, b: 1831.1934, a: 1}
+  m_IndirectSpecularColor: {r: 1124.3696, g: 1295.8257, b: 1828.0508, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -627,7 +627,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 236769291}
-  m_LocalRotation: {x: 0.43371657, y: 0.003957329, z: -0.0019048676, w: 0.90103865}
+  m_LocalRotation: {x: 0.43371657, y: 0.0039572837, z: -0.0019048457, w: 0.90103865}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -704,7 +704,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da518bb2426d7c74c99e104a97026637, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _explosionTime: 10
+  _flashCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 19.632444
+      outSlope: 19.632444
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.1726186
+    - serializedVersion: 3
+      time: 0.06664247
+      value: 0.9683928
+      inSlope: 1.586657
+      outSlope: 1.586657
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.2565909
+      value: 0.5471279
+      inSlope: 0.20785244
+      outSlope: 0.20785244
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.21631414
+    - serializedVersion: 3
+      time: 0.60479355
+      value: 0.6872464
+      inSlope: -0.61199534
+      outSlope: -0.61199534
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.20232993
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0101929
+      value: -0.013885498
+      inSlope: -1.5581076
+      outSlope: -1.5581076
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.5775545
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _explosionTime: 20
 --- !u!1 &752724289
 GameObject:
   m_ObjectHideFlags: 0
@@ -815,7 +866,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771836194}
-  m_LocalRotation: {x: 0.48476383, y: 0.0038413582, z: -0.0021290632, w: 0.8746341}
+  m_LocalRotation: {x: 0.48476383, y: 0.0038413212, z: -0.0021290428, w: 0.8746341}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -900,7 +951,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 947472496}
-  m_LocalRotation: {x: 0.4593453, y: 0.0039011368, z: -0.0020174219, w: 0.88824695}
+  m_LocalRotation: {x: 0.4593453, y: 0.0039011098, z: -0.0020174081, w: 0.88824695}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1665,7 +1716,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1543877256}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.43918484, y: 6180, z: -49.99807}
+  m_LocalPosition: {x: -0.43918526, y: 6180, z: -49.99807}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1939,8 +1990,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823688464}
-  m_LocalRotation: {x: 0.4593453, y: 0.0039011524, z: -0.00201743, w: 0.88824695}
-  m_LocalPosition: {x: -0.43918484, y: 6180, z: -49.99807}
+  m_LocalRotation: {x: 0.4593453, y: 0.0039010947, z: -0.0020174002, w: 0.88824695}
+  m_LocalPosition: {x: -0.43918526, y: 6180, z: -49.99807}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2535,6 +2586,11 @@ PrefabInstance:
       propertyPath: Boom.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 432432462}
+    - target: {fileID: 2464818047654737660, guid: 4885cbe2cd50b644cbe7afea36b690d6,
+        type: 3}
+      propertyPath: Boom.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Trigger
+      objectReference: {fileID: 0}
     - target: {fileID: 2464818047911473152, guid: 4885cbe2cd50b644cbe7afea36b690d6,
         type: 3}
       propertyPath: _rotationTarget

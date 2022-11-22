@@ -8,46 +8,106 @@ using UnityEngine.Rendering.HighDefinition;
 [RequireComponent(typeof(Volume))]
 public class VolumesControl : MonoBehaviour
 {
+    [SerializeField] private AnimationCurve _flashCurve;
     [SerializeField] private float _explosionTime = 10;
-    private Volume _volume;
-    private VolumeProfile _profile;
-    private LiftGammaGain _lgg;
+    private Volume volume;
+    private VolumeProfile profile;
+    private LiftGammaGain lgg;
+    private Vector4 liftVal;
+    private Vector4 gammaVal;
+    private Vector4 gainVal;
 
-    public IEnumerator FlashAndFade()
+    private float intensity;
+    private float startTime;
+    private float endTime;
+
+    private bool hasExploded = false;
+
+
+    void Start()
+    {     
+        volume = GetComponent<Volume>();
+        profile = volume.sharedProfile;
+
+        // fetches the lift gamma grain or creates one if not fetched
+        if (!profile.TryGet<LiftGammaGain>(out lgg))
+        {
+            lgg = profile.Add<LiftGammaGain>(false);
+        }
+
+        // turns the settings off
+        lgg.lift.overrideState = false;
+        lgg.gamma.overrideState = false;
+        lgg.gain.overrideState = false;
+
+        // fetches values stored in the volume settings
+        liftVal =   lgg.lift.value;
+        gammaVal =  lgg.gamma.value;
+        gainVal =   lgg.gain.value;
+
+        // sets values to 0 before turning settings back on
+        lgg.lift.value = new Vector4(0,0,0,0);
+        lgg.gamma.value = new Vector4(0,0,0,0);
+        lgg.gain.value = new Vector4(0,0,0,0);
+
+        // turns the settings on
+        lgg.lift.overrideState = true;
+        lgg.gamma.overrideState = true;
+        lgg.gain.overrideState = true;
+
+    }
+
+    private void Update()
+    {
+        if(hasExploded) Flash();
+    }
+
+    public void Trigger()
+    {
+        if (!hasExploded) startTime = Time.time;
+        endTime = startTime + _explosionTime;
+        Debug.Log(startTime);
+        Debug.Log(endTime);
+        hasExploded = true;
+    }
+
+    private void Flash()
+    {
+        float t = MathUtils.InverseLerp(startTime, endTime, Time.time);
+        intensity = _flashCurve.Evaluate(t);
+        Debug.Log(intensity);
+
+        // retrieves initial settings and interpolates along animation curve
+        lgg.lift.value = liftVal * intensity * 1.2f;
+        lgg.gamma.value = gammaVal * intensity * 1.2f;
+        lgg.gain.value = gainVal * intensity * 1.2f;
+
+        if (intensity <= 0)
+        {
+            lgg.lift.value = liftVal;
+            lgg.gamma.value = gammaVal;
+            lgg.gain.value = gainVal;
+
+            // turns the settings on
+            lgg.lift.overrideState = false;
+            lgg.gamma.overrideState = false;
+            lgg.gain.overrideState = false;
+        }
+    }
+
+    IEnumerator FlashAndFade()
     {
         // turns the settings on
-        _lgg.lift.overrideState = true;
-        _lgg.gamma.overrideState = true;
-        _lgg.gain.overrideState = true;
+        lgg.lift.overrideState = true;
+        lgg.gamma.overrideState = true;
+        lgg.gain.overrideState = true;
 
         yield return new WaitForSeconds(_explosionTime);
 
         // turns the settings off
-        _lgg.lift.overrideState = false;
-        _lgg.gamma.overrideState = false;
-        _lgg.gain.overrideState = false;
+        lgg.lift.overrideState = false;
+        lgg.gamma.overrideState = false;
+        lgg.gain.overrideState = false;
 
-    }
-
-    void Start()
-    {     
-        _volume = GetComponent<Volume>();
-        _profile = _volume.sharedProfile;
-
-        // fetches the lift gamma grain or creates one if not fetched
-        if (!_profile.TryGet<LiftGammaGain>(out _lgg))
-        {
-            _lgg = _profile.Add<LiftGammaGain>(false);
-        }
-
-        // turns off anything that is there
-        _lgg.lift.overrideState = false;
-        _lgg.gamma.overrideState = false;
-        _lgg.gain.overrideState = false;
-    }
-
-    public void Flash()
-    {
-        StartCoroutine(FlashAndFade());
     }
 }

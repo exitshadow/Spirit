@@ -24,11 +24,14 @@ public class Nuke : MonoBehaviour
 
     public void Launch(float speed)
     {
-        Debug.Log("launching");
-        hasLaunched = true;
-        launchPos = transform.parent.position;
-        transform.SetParent(null);
-        this.startSpeed = speed;
+        if (transform.parent != null)
+        {
+            Debug.Log("launching");
+            hasLaunched = true;
+            launchPos = transform.parent.position;
+            transform.SetParent(null);
+            this.startSpeed = speed;
+        }
     }
 
     private void Update()

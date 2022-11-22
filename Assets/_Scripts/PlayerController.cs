@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
 
     public void Nuke()
     {
+        if (_nuke != null)
         _nuke.Launch(_cruisingSpeed);
     }
 
