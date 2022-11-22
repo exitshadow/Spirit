@@ -14,14 +14,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _cruisingSpeed = .05f;
 
     [Header("Steering Settings")]
-    [Range(0.01f, 0.2f)] [SerializeField] private float _steeringSpeed = .05f;
-    [Range(0.01f, 1.0f)] [SerializeField] private float _rotationSpeed = .02f;
+    [Range(0.01f, 0.1f)] [SerializeField] private float _steeringSpeed = .05f;
+    [Range(0.01f, 0.05f)] [SerializeField] private float _rotationSpeed = .02f;
     [SerializeField] private float _steeringBackSpeed = 15f;
     [SerializeField] private float _maxLateralAngle = 35f;
 
     [Header("Tilting Settings")]
-    [Range(0.01f, 0.2f)] [SerializeField] private float _tiltingSpeed = .05f;
-    [Range(0.01f, 0.2f)] [SerializeField] private float _frontRotationSpeed = .02f;
+    [Range(0.001f, 0.05f)] [SerializeField] private float _tiltingSpeed = .05f;
+    [Range(0.001f, 0.05f)] [SerializeField] private float _altitudeShiftSpeed = 1f;
     [SerializeField] private float _tiltingBackSpeed = 15f;
     [SerializeField] private float _maxFrontalAngle = 15f;
 
@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
 
     public void Nuke()
     {
-        _nuke.GetComponent<Rigidbody>().useGravity = true;
+        _nuke.Launch(_cruisingSpeed);
     }
 
     private void Start()
@@ -42,7 +42,6 @@ public class PlayerController : MonoBehaviour
         playerActions = new DefaultInputActions();
         move = playerActions.Player.Move;
         move.Enable();
-
     }
 
     private void Update()
@@ -52,7 +51,6 @@ public class PlayerController : MonoBehaviour
         Orbit();
         Steer();
         Tilt();
-
     }
 
     private void Orbit()
@@ -63,9 +61,8 @@ public class PlayerController : MonoBehaviour
     private void Steer()
     {
         float rotZ = transform.rotation.eulerAngles.z;
-        Debug.Log(transform.rotation.eulerAngles.z);
-
         steering = 0;
+
         if (move.IsInProgress() && direction.x != 0)
         {
             accelerationTime.x += Time.fixedDeltaTime * .3f;
@@ -83,8 +80,6 @@ public class PlayerController : MonoBehaviour
             if (rotZ > 2 && rotZ < 180) steering = -Time.fixedDeltaTime * _steeringBackSpeed;
             else if (rotZ > 180 && rotZ < 358) steering = Time.fixedDeltaTime * _steeringBackSpeed;
             else steering = 0;
-
-            Debug.Log("steering X: " + steering);
         }
 
         // tilts the aircraft laterally
@@ -95,20 +90,28 @@ public class PlayerController : MonoBehaviour
 
     private void Tilt()
     {
+        float altitudeShift = 0;
         float rotX = transform.rotation.eulerAngles.x;
-        Debug.Log(rotX);
-
         tilting = 0;
+
         if (move.IsInProgress() && direction.y != 0)
         {
             tilting = direction.y * _tiltingSpeed * accelerationTime.y;
             accelerationTime.y += Time.fixedDeltaTime * .3f;
 
+            if ((rotX <= 360 - _maxFrontalAngle && rotX > 180) || (rotX >= _maxFrontalAngle && rotX < 180))
+            {
+                tilting = 0;
+            }
+
+            altitudeShift = tilting * _altitudeShiftSpeed;
         }
-        else if (accelerationTime.y > 0)
+        else
         {
-            accelerationTime.y -= Time.fixedDeltaTime * .3f;
-            tilting = - 1 * _tiltingSpeed * accelerationTime.y;
+            accelerationTime.y = 0;
+
+            if (rotX > 2 && rotX < 180) tilting = -Time.fixedDeltaTime * _tiltingBackSpeed;
+            else if (rotX > 180 && rotX < 358) tilting = Time.fixedDeltaTime * _tiltingBackSpeed;
         }
 
         // tilts the aircraft frontally
@@ -116,7 +119,7 @@ public class PlayerController : MonoBehaviour
 
         // moves up or down
         transform.position = new Vector3(transform.position.x,
-                                        transform.position.y + tilting * -1,
+                                        transform.position.y + altitudeShift * -1,
                                         transform.position.z);
     }
     

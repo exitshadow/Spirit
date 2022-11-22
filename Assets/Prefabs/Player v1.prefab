@@ -47,7 +47,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1d0f8bf848bb5d48816d8de19534fa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nuke: {fileID: 0}
+  _nuke: {fileID: 2464818047654737660}
+  _rotationTarget: {fileID: 0}
+  _cruisingSpeed: 0.05
+  _steeringSpeed: 0.05
+  _rotationSpeed: 0.02
+  _steeringBackSpeed: 15
+  _maxLateralAngle: 35
+  _tiltingSpeed: 0.0195
+  _frontRotationSpeed: 0.0138
+  _tiltingBackSpeed: 5
+  _maxFrontalAngle: 15
 --- !u!114 &2464818047911473153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,7 +93,19 @@ MonoBehaviour:
     m_ActionId: 6b444451-8a00-4d00-a97e-f47457f736a8
     m_ActionName: Player/Look[/Mouse/delta,/Pen/delta]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2464818047911473152}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: Nuke
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 6c2ab1b8-8984-453a-af3d-a3c78ae1679a
     m_ActionName: Player/Fire[/Mouse/leftButton]
   - m_PersistentCalls:
@@ -144,6 +166,7 @@ GameObject:
   - component: {fileID: 8427065050061599188}
   - component: {fileID: 8596501426367012621}
   - component: {fileID: 2464818047654737659}
+  - component: {fileID: 2464818047654737660}
   m_Layer: 0
   m_Name: Nuke
   m_TagString: Untagged
@@ -238,14 +261,42 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3591183656414439465}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 1100
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
+--- !u!114 &2464818047654737660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3591183656414439465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b1ef50cf5de48c4e8dc0ab6ecb49d1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Boom:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: VolumesControl, Assembly-CSharp
+        m_MethodName: Flash
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _earthSurfaceRadius: 6000
 --- !u!1001 &2464818049592401720
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -271,7 +322,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c7018417373d599428b4b364e3a8a4f2,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 5.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c7018417373d599428b4b364e3a8a4f2,
         type: 3}
