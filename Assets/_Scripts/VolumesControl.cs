@@ -10,6 +10,7 @@ public class VolumesControl : MonoBehaviour
 {
     [SerializeField] private AnimationCurve _flashCurve;
     [SerializeField] private float _explosionTime = 10;
+    [Range(0.5f, 3f)] [SerializeField] private float _intensityMultiplier = 1.5f;
     private Volume volume;
     private VolumeProfile profile;
     private LiftGammaGain lgg;
@@ -17,7 +18,6 @@ public class VolumesControl : MonoBehaviour
     private Vector4 gammaVal;
     private Vector4 gainVal;
 
-    private float intensity;
     private float startTime;
     private float endTime;
 
@@ -74,13 +74,12 @@ public class VolumesControl : MonoBehaviour
     private void Flash()
     {
         float t = MathUtils.InverseLerp(startTime, endTime, Time.time);
-        intensity = _flashCurve.Evaluate(t);
-        Debug.Log(intensity);
+        float intensity = _flashCurve.Evaluate(t);
 
         // retrieves initial settings and interpolates along animation curve
-        lgg.lift.value = liftVal * intensity * 1.2f;
-        lgg.gamma.value = gammaVal * intensity * 1.2f;
-        lgg.gain.value = gainVal * intensity * 1.2f;
+        lgg.lift.value = liftVal * intensity * _intensityMultiplier;
+        lgg.gamma.value = gammaVal * intensity * _intensityMultiplier;
+        lgg.gain.value = gainVal * intensity * _intensityMultiplier;
 
         if (intensity <= 0)
         {
