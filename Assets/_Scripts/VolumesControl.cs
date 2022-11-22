@@ -23,6 +23,8 @@ public class VolumesControl : MonoBehaviour
 
     private bool hasExploded = false;
 
+// todo
+// bugfix : if the nuke never falls, we loose the base profile!
 
     void Start()
     {     
