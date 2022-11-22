@@ -6,18 +6,31 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
+    [Header("Nuclear Device")]
     [SerializeField] private Nuke _nuke;
-    [SerializeField] private Transform _rotationTarget;
-    [SerializeField] private float _speed = 20f;
-    [Range(0.01f, 0.2f)] [SerializeField] private float _steeringFactor = .05f;
-    [Range(0.01f, 1.0f)] [SerializeField] private float _rotationFactor = .2f;
-    [SerializeField] private float _steerBackFactor = 100f;
 
-    private DefaultInputActions _playerActions;
-    private InputAction _move;
-    private Vector2 _direction;
-    private Vector2 _accelerationTime = new Vector2();
-    private float steering = 0;
+    [Header("Orbiting Settings")]
+    [SerializeField] private Transform _rotationTarget;
+    [SerializeField] private float _cruisingSpeed = .05f;
+
+    [Header("Steering Settings")]
+    [Range(0.01f, 0.2f)] [SerializeField] private float _steeringSpeed = .05f;
+    [Range(0.01f, 1.0f)] [SerializeField] private float _rotationSpeed = .02f;
+    [SerializeField] private float _steeringBackSpeed = 15f;
+    [SerializeField] private float _maxLateralAngle = 35f;
+
+    [Header("Tilting Settings")]
+    [Range(0.01f, 0.2f)] [SerializeField] private float _tiltingSpeed = .05f;
+    [Range(0.01f, 0.2f)] [SerializeField] private float _frontRotationSpeed = .02f;
+    [SerializeField] private float _tiltingBackSpeed = 15f;
+    [SerializeField] private float _maxFrontalAngle = 15f;
+
+    private DefaultInputActions playerActions;
+    private InputAction move;
+    private Vector2 direction;
+    private Vector2 accelerationTime = new Vector2();
+    private float steering;
+    private float tilting;
 
     public void Nuke()
     {
@@ -26,77 +39,84 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        _playerActions = new DefaultInputActions();
-        _move = _playerActions.Player.Move;
-        _move.Enable();
+        playerActions = new DefaultInputActions();
+        move = playerActions.Player.Move;
+        move.Enable();
 
     }
 
     private void Update()
     {
-        _direction = _move.ReadValue<Vector2>();
+        direction = move.ReadValue<Vector2>();
         
         Orbit();
-        Turn();
-        //ControlAltitude();
+        Steer();
+        Tilt();
 
     }
 
     private void Orbit()
     {
-        transform.RotateAround(_rotationTarget.position, transform.right, _speed * Time.deltaTime);
+        transform.RotateAround(_rotationTarget.position, transform.right, _cruisingSpeed * Time.deltaTime);
     }
 
-    private void Turn()
+    private void Steer()
     {
+        float rotZ = transform.rotation.eulerAngles.z;
         Debug.Log(transform.rotation.eulerAngles.z);
-        float steering = 0;
-        if (_move.IsInProgress() && _direction.x != 0)
-        {
-            _accelerationTime.x += Time.fixedDeltaTime * .3f;
-            steering = _direction.x * _steeringFactor * _accelerationTime.x * -1;
 
+        steering = 0;
+        if (move.IsInProgress() && direction.x != 0)
+        {
+            accelerationTime.x += Time.fixedDeltaTime * .3f;
+            steering = direction.x * _steeringSpeed * accelerationTime.x * -1;
+
+            if ((rotZ <= 360 - _maxLateralAngle && rotZ > 180) || (rotZ >= _maxLateralAngle && rotZ < 180))
+            {
+                steering = 0;
+            }
         }
         else
         {
-            _accelerationTime.x = 0;
-        
-            float rotZ = transform.rotation.eulerAngles.z;
-            if (rotZ > 2) steering = -Time.fixedDeltaTime * _steerBackFactor;
-            else if (rotZ < - 2) steering = Time.fixedDeltaTime * _steerBackFactor;
+            accelerationTime.x = 0;
+
+            if (rotZ > 2 && rotZ < 180) steering = -Time.fixedDeltaTime * _steeringBackSpeed;
+            else if (rotZ > 180 && rotZ < 358) steering = Time.fixedDeltaTime * _steeringBackSpeed;
             else steering = 0;
 
             Debug.Log("steering X: " + steering);
         }
-        
+
         // tilts the aircraft laterally
         transform.Rotate(0,0, steering);
-
         // rotates the aircraft by direction
-        transform.Rotate(0, _direction.x * _rotationFactor, 0);
+        transform.Rotate(0, direction.x * _rotationSpeed, 0);
     }
 
-    private void ControlAltitude()
+    private void Tilt()
     {
-        float steeringY = 0;
-        if (_move.IsInProgress() && _direction.y != 0)
+        float rotX = transform.rotation.eulerAngles.x;
+        Debug.Log(rotX);
+
+        tilting = 0;
+        if (move.IsInProgress() && direction.y != 0)
         {
-            steeringY = _direction.y * _steeringFactor * _accelerationTime.y;
-            _accelerationTime.y += Time.fixedDeltaTime * .3f;
+            tilting = direction.y * _tiltingSpeed * accelerationTime.y;
+            accelerationTime.y += Time.fixedDeltaTime * .3f;
 
         }
-        else if (_accelerationTime.y > 0)
+        else if (accelerationTime.y > 0)
         {
-            _accelerationTime.y -= Time.fixedDeltaTime * .3f;
-            steeringY = - 1 * _steeringFactor * _accelerationTime.y;
+            accelerationTime.y -= Time.fixedDeltaTime * .3f;
+            tilting = - 1 * _tiltingSpeed * accelerationTime.y;
         }
 
         // tilts the aircraft frontally
-        transform.Rotate(steeringY, 0, 0);
+        transform.Rotate(tilting, 0, 0);
 
         // moves up or down
         transform.position = new Vector3(transform.position.x,
-                                        transform.position.y + steeringY * -1,
+                                        transform.position.y + tilting * -1,
                                         transform.position.z);
     }
     
