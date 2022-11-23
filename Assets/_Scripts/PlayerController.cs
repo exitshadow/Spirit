@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Steering Settings")]
     [SerializeField] private AnimationCurve _steeringCurveIn;
-    [Range(0.01f, 0.1f)] [SerializeField] private float _steeringSpeed = .05f;
+    [Range(0.001f, 2f)] [SerializeField] private float _steeringSpeed = .05f;
     [Range(0.01f, 0.05f)] [SerializeField] private float _rotationSpeed = .02f;
     [SerializeField] private AnimationCurve _steeringCurveOut;
     [SerializeField] private float _steeringBackDuration = 15f;
@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Tilting Settings")]
     [SerializeField] private AnimationCurve _tiltingCurveIn;
-    [Range(0.001f, 0.05f)] [SerializeField] private float _tiltingSpeed = .05f;
+    [Range(1f, 100f)] [SerializeField] private float _tiltingSpeed = .05f;
     [Range(0.001f, 0.05f)] [SerializeField] private float _altitudeShiftSpeed = 1f;
     [SerializeField] private AnimationCurve _tiltingCurveOut;
     [SerializeField] private float _tiltingBackDuration = 15f;
@@ -47,9 +47,9 @@ public class PlayerController : MonoBehaviour
 
 // todo
 //  replace simple multipliers with animation curves
-//  bugs:
-//      - the curves are useless because it’s just adding to the steering
-//      without being really modulated (just the beginnings of each curve)
+//  bugs: FIXED!
+//      //- the curves are useless because it’s just adding to the steering
+//      //without being really modulated (just the beginnings of each curve)
 
     public void Nuke()
     {
@@ -87,25 +87,28 @@ public class PlayerController : MonoBehaviour
         if (move.IsInProgress() && direction.x != 0)
         {
             isSteeringBack = false;
-            accelerationTime.x += Time.fixedDeltaTime * .3f;
-            float t;
-            t = _steeringCurveIn.Evaluate(accelerationTime.x);
 
-            
-            Debug.Log(t);
-
-            steering = direction.x * _steeringSpeed * t * -1;
-
+            // limits the steering inclination
             if ((rotZ <= 360 - _maxLateralAngle && rotZ > 180) || (rotZ >= _maxLateralAngle && rotZ < 180))
             {
                 steering = 0;
             }
+            else
+            {
+                // evaluates players inputs and remaps according to the curve
+                float t;
+                if (direction.x > 0)
+                    t = _steeringCurveIn.Evaluate(direction.x);
+                else
+                    t = -_steeringCurveIn.Evaluate(-direction.x);
+
+                // multiplies the result by the speed and inverses controls
+                steering = _steeringSpeed * t * -1;
+            }
         }
-        // if player isn’t giving X axis input
         else
         {
-            accelerationTime.x = 0;
-
+            // sniffs the moment the player stops their input
             if (!isSteeringBack)
             {
                 isSteeringBack = true;
@@ -113,16 +116,14 @@ public class PlayerController : MonoBehaviour
                 steerBackEndTime = steerBackStartTime + _steeringBackDuration;
             }
 
+            // normalizes the value between the starting time and the expected back time
             float t = MathUtils.InverseLerp(steerBackStartTime, steerBackEndTime, Time.time);
 
+            // steers back in the right direction depending on the angle the player’s in
             if (rotZ > 2 && rotZ < 180)
-            {
-                steering = - _steeringCurveOut.Evaluate(Time.fixedDeltaTime * _steeringBackDuration);
-            }
+                steering = - _steeringCurveOut.Evaluate(t);
             else if (rotZ > 180 && rotZ < 358)
-            {
-                steering = _steeringCurveOut.Evaluate(Time.fixedDeltaTime * _steeringBackDuration);
-            }
+                steering = _steeringCurveOut.Evaluate(t);
             else
             {
                 isSteeringBack = false;
