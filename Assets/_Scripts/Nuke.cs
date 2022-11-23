@@ -41,8 +41,8 @@ public class Nuke : MonoBehaviour
         float step = _dropSpeed * Time.fixedDeltaTime;
 
         Vector3 stepTowardsEarth = Vector3.MoveTowards(transform.position, _earthTransform.position, step);
-        Vector3 stepForward = new Vector3(0, 0, transform.position.z * startSpeed * Time.fixedDeltaTime);
-        transform.position = stepForward + stepTowardsEarth;
+        transform.position = stepTowardsEarth;
+        transform.RotateAround(_earthTransform.position, transform.right, startSpeed * Time.fixedDeltaTime);
     }
 
     private void CheckIfLanded()
