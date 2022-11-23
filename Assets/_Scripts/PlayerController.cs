@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
         direction = move.ReadValue<Vector2>();
         
         Orbit();
-        //Steer();
+        Steer();
         Tilt();
     }
 
