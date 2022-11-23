@@ -29,13 +29,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _tiltingBackDuration = 15f;
     [SerializeField] private float _maxFrontalAngle = 15f;
 
+    [Header("Debugging & Adjustments")]
+    [SerializeField] private bool isOrbitOn = true;
+    [SerializeField] private bool isSteeringOn = true;
+    [SerializeField] private bool isTiltingOn = true;
+
     // inputs
     private DefaultInputActions playerActions;
     private InputAction move;
     private Vector2 direction;
 
     // steering & tilting state variables
-    private Vector2 accelerationTime = new Vector2();
     private float steering;                 // amount of steering
     private float tilting;                  // amount of tilting
     private float steerBackStartTime;
@@ -44,11 +48,6 @@ public class PlayerController : MonoBehaviour
     private float tiltBackEndTime;
     private bool isSteeringBack;
     private bool isTiltingBack;
-
-// todo
-//  replace simple multipliers with animation curves
-//  bugs:
-//      - the tilting seems to block when the tilting back is going on
 
     public void Nuke()
     {
@@ -67,9 +66,9 @@ public class PlayerController : MonoBehaviour
     {
         direction = move.ReadValue<Vector2>();
         
-        Orbit();
-        Steer();
-        Tilt();
+        if (isOrbitOn)      Orbit();
+        if (isSteeringOn)   Steer();
+        if (isTiltingOn)    Tilt();
     }
 
     private void Orbit()
@@ -138,7 +137,6 @@ public class PlayerController : MonoBehaviour
         if (move.IsInProgress() && direction.y != 0)
         {
             isTiltingBack = false;
-            Debug.Log("isTiltingBack: " + isTiltingBack);
 
             float t;
             if (direction.y > 0)
@@ -155,9 +153,6 @@ public class PlayerController : MonoBehaviour
             }
 
             altitudeShift = tilting * _altitudeShiftSpeed;
-
-            Debug.Log(direction.y);
-            Debug.Log(tilting);
         }
         else
         {
@@ -176,8 +171,6 @@ public class PlayerController : MonoBehaviour
                 tilting = _steeringCurveOut.Evaluate(t);
             else
                 isTiltingBack = false;
-            
-            Debug.Log("isTiltingBack: " + isTiltingBack);
         }
 
         // tilts the aircraft frontally
