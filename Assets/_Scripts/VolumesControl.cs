@@ -11,6 +11,7 @@ public class VolumesControl : MonoBehaviour
     [SerializeField] private AnimationCurve _flashCurve;
     [SerializeField] private float _explosionTime = 10;
     [Range(0.5f, 3f)] [SerializeField] private float _intensityMultiplier = 1.5f;
+
     private Volume volume;
     private VolumeProfile profile;
     private LiftGammaGain lgg;
@@ -22,48 +23,13 @@ public class VolumesControl : MonoBehaviour
     private float endTime;
 
     private bool hasExploded = false;
+    private bool isOver = false;
 
 // todo
 // bugfix : if the nuke never falls, we loose the base profile!
+// refactor with coroutines so the process doesn’t keep checking in the update forever
 
-    void Start()
-    {     
-        volume = GetComponent<Volume>();
-        profile = volume.sharedProfile;
-
-        // fetches the lift gamma grain or creates one if not fetched
-        if (!profile.TryGet<LiftGammaGain>(out lgg))
-        {
-            lgg = profile.Add<LiftGammaGain>(false);
-        }
-
-        // turns the settings off
-        lgg.lift.overrideState = false;
-        lgg.gamma.overrideState = false;
-        lgg.gain.overrideState = false;
-
-        // fetches values stored in the volume settings
-        liftVal =   lgg.lift.value;
-        gammaVal =  lgg.gamma.value;
-        gainVal =   lgg.gain.value;
-
-        // sets values to 0 before turning settings back on
-        lgg.lift.value = new Vector4(0,0,0,0);
-        lgg.gamma.value = new Vector4(0,0,0,0);
-        lgg.gain.value = new Vector4(0,0,0,0);
-
-        // turns the settings on
-        lgg.lift.overrideState = true;
-        lgg.gamma.overrideState = true;
-        lgg.gain.overrideState = true;
-
-    }
-
-    private void Update()
-    {
-        if(hasExploded) Flash();
-    }
-
+#region public methods
     public void Trigger()
     {
         if (!hasExploded) startTime = Time.time;
@@ -71,44 +37,89 @@ public class VolumesControl : MonoBehaviour
         Debug.Log(startTime);
         Debug.Log(endTime);
         hasExploded = true;
+        EnableLGG(true);
+    }
+#endregion
+
+#region unity messages
+    private void Start()
+    {
+        volume = GetComponent<Volume>();
+        profile = volume.sharedProfile;
+
+        LGGSetup();
     }
 
+    private void Update()
+    {
+        if(hasExploded && !isOver) Flash();
+    }
+
+    private void OnDisable()
+    {
+        ResetLGGValues();
+        EnableLGG(false);
+    }
+
+#endregion
+
+#region private methods
     private void Flash()
     {
         float t = MathUtils.InverseLerp(startTime, endTime, Time.time);
         float intensity = _flashCurve.Evaluate(t);
+        Debug.Log("time on curve: " + t);
+        Debug.Log("intensity: " + intensity);
+
 
         // retrieves initial settings and interpolates along animation curve
         lgg.lift.value = liftVal * intensity * _intensityMultiplier;
         lgg.gamma.value = gammaVal * intensity * _intensityMultiplier;
         lgg.gain.value = gainVal * intensity * _intensityMultiplier;
 
-        if (intensity <= 0)
+        if (t > 1)
         {
-            lgg.lift.value = liftVal;
-            lgg.gamma.value = gammaVal;
-            lgg.gain.value = gainVal;
-
-            // turns the settings on
-            lgg.lift.overrideState = false;
-            lgg.gamma.overrideState = false;
-            lgg.gain.overrideState = false;
+            ResetLGGValues();
+            EnableLGG(false);
+            isOver = true;
         }
     }
 
-    IEnumerator FlashAndFade()
+    private void LGGSetup()
     {
-        // turns the settings on
-        lgg.lift.overrideState = true;
-        lgg.gamma.overrideState = true;
-        lgg.gain.overrideState = true;
+        // fetches the lift gamma grain or creates one if not fetched
+        if (!profile.TryGet<LiftGammaGain>(out lgg))
+        {
+            lgg = profile.Add<LiftGammaGain>(false);
+        }
 
-        yield return new WaitForSeconds(_explosionTime);
+        // fetches values stored in the volume settings
+        liftVal = lgg.lift.value;
+        gammaVal = lgg.gamma.value;
+        gainVal = lgg.gain.value;
 
-        // turns the settings off
-        lgg.lift.overrideState = false;
-        lgg.gamma.overrideState = false;
-        lgg.gain.overrideState = false;
-
+        EnableLGG(false);
     }
+
+    private void EnableLGG(bool value)
+    {
+        lgg.lift.overrideState = value;
+        lgg.gamma.overrideState = value;
+        lgg.gain.overrideState = value;
+
+        Debug.Log($"LGG values are {value}");
+    }
+
+    private void ResetLGGValues()
+    {
+        lgg.lift.value = liftVal;
+        lgg.gamma.value = gammaVal;
+        lgg.gain.value = gainVal;
+
+        Debug.Log("LGG values have been reset.");
+    }
+
+
+#endregion
+
 }
