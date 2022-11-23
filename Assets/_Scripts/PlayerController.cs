@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Tilting Settings")]
     [SerializeField] private AnimationCurve _tiltingCurveIn;
-    [Range(1f, 100f)] [SerializeField] private float _tiltingSpeed = .05f;
+    [Range(0.001f, 2f)] [SerializeField] private float _tiltingSpeed = .05f;
     [Range(0.001f, 0.05f)] [SerializeField] private float _altitudeShiftSpeed = 1f;
     [SerializeField] private AnimationCurve _tiltingCurveOut;
     [SerializeField] private float _tiltingBackDuration = 15f;
@@ -47,9 +47,8 @@ public class PlayerController : MonoBehaviour
 
 // todo
 //  replace simple multipliers with animation curves
-//  bugs: FIXED!
-//      //- the curves are useless because it’s just adding to the steering
-//      //without being really modulated (just the beginnings of each curve)
+//  bugs:
+//      - the tilting seems to block when the tilting back is going on
 
     public void Nuke()
     {
@@ -69,7 +68,7 @@ public class PlayerController : MonoBehaviour
         direction = move.ReadValue<Vector2>();
         
         Orbit();
-        Steer();
+        //Steer();
         Tilt();
     }
 
@@ -89,11 +88,7 @@ public class PlayerController : MonoBehaviour
             isSteeringBack = false;
 
             // limits the steering inclination
-            if ((rotZ <= 360 - _maxLateralAngle && rotZ > 180) || (rotZ >= _maxLateralAngle && rotZ < 180))
-            {
-                steering = 0;
-            }
-            else
+            if (!((rotZ <= 360 - _maxLateralAngle && rotZ > 180) || (rotZ >= _maxLateralAngle && rotZ < 180)))
             {
                 // evaluates players inputs and remaps according to the curve
                 float t;
@@ -125,10 +120,7 @@ public class PlayerController : MonoBehaviour
             else if (rotZ > 180 && rotZ < 358)
                 steering = _steeringCurveOut.Evaluate(t);
             else
-            {
                 isSteeringBack = false;
-                steering = 0;
-            }
         }
 
         // tilts the aircraft laterally
@@ -145,26 +137,47 @@ public class PlayerController : MonoBehaviour
 
         if (move.IsInProgress() && direction.y != 0)
         {
+            isTiltingBack = false;
+            Debug.Log("isTiltingBack: " + isTiltingBack);
+
             float t;
-            accelerationTime.y += Time.fixedDeltaTime * .3f;
+            if (direction.y > 0)
+                t = _tiltingCurveIn.Evaluate(direction.y);
+            else
+                t = -_tiltingCurveIn.Evaluate(-direction.y);
 
-            t = _tiltingCurveIn.Evaluate(accelerationTime.y);
+            tilting = _tiltingSpeed * t;
 
-            tilting = direction.y * _tiltingSpeed * t;
-
+            // limits the rotation between bounds
             if ((rotX <= 360 - _maxFrontalAngle && rotX > 180) || (rotX >= _maxFrontalAngle && rotX < 180))
             {
                 tilting = 0;
             }
 
             altitudeShift = tilting * _altitudeShiftSpeed;
+
+            Debug.Log(direction.y);
+            Debug.Log(tilting);
         }
         else
         {
-            accelerationTime.y = 0;
+            if (!isTiltingBack)
+            {
+                isTiltingBack = true;
+                tiltBackStartTime = Time.time;
+                tiltBackEndTime = tiltBackStartTime + _tiltingBackDuration;
+            }
 
-            if (rotX > 2 && rotX < 180) tilting = -Time.fixedDeltaTime * _tiltingBackDuration;
-            else if (rotX > 180 && rotX < 358) tilting = Time.fixedDeltaTime * _tiltingBackDuration;
+            float t = MathUtils.InverseLerp(tiltBackStartTime, tiltBackEndTime, Time.time);
+
+            if (rotX > 2 && rotX < 180)
+                tilting = - _steeringCurveOut.Evaluate(t);
+            else if (rotX > 180 && rotX < 358)
+                tilting = _steeringCurveOut.Evaluate(t);
+            else
+                isTiltingBack = false;
+            
+            Debug.Log("isTiltingBack: " + isTiltingBack);
         }
 
         // tilts the aircraft frontally
