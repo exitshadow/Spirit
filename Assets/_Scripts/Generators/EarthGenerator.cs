@@ -30,8 +30,6 @@ public class EarthGenerator : MonoBehaviour
         
         for (int i = 0; i < chunksBuffer.Length; i++)
         {
-            Debug.Log($"chunksBuffer lenght: {chunksBuffer.Length}");
-            Debug.Log(i);
             if (chunksBuffer[i] == null)
             {
                 Debug.Log("Could not find chunks buffer");
@@ -51,6 +49,7 @@ public class EarthGenerator : MonoBehaviour
     private IEnumerator CreateFaceChunks(Vector3 facingDirection, int subDivs, int res, float size = 1f)
     {
         int nbVerts = (res + 1) * (res + 1);    // number of vertices in a chunk
+        int nbTris = res * res * 6;             // number of triangle indexes in a chunk
         float chunkSize = size / subDivs;       // the width of each individual chunk
         float chunkResStep = chunkSize / res;   // the distance between vertices in a chunk
 
@@ -64,8 +63,8 @@ public class EarthGenerator : MonoBehaviour
         {
             for (int v = 0; v < subDivs; v++)
             {
-                chunksBuffer[chunksIndex] = new ChunkData(new Vector3[nbVerts], new int[nbVerts]);
-                Debug.Log("chunks index: " + chunksIndex);
+                chunksBuffer[chunksIndex] = new ChunkData(new Vector3[nbVerts], new int[nbTris]);
+                //Debug.Log("chunks index: " + chunksIndex);
 
                 // generating vertices
                 int vertsIndex = 0;
@@ -76,9 +75,23 @@ public class EarthGenerator : MonoBehaviour
                         float distX = rootIndex.x + chunkResStep * x;
                         float distY = rootIndex.y + chunkResStep * y;
                         chunksBuffer[chunksIndex].vertices[vertsIndex] = new Vector3(distX, distY, size / 2);
-                        Debug.Log(chunksBuffer[chunksIndex].vertices[vertsIndex] + " " + vertsIndex);
+                        //Debug.Log(chunksBuffer[chunksIndex].vertices[vertsIndex] + " " + vertsIndex);
                         vertsIndex++;
-                        yield return new WaitForSeconds(0.1f);
+                        yield return new WaitForSeconds(0.05f);
+                    }
+                }
+
+                // todo generating triangles
+                for (int ti = 0, vi = 0, y = 0; y < res; y++, vi++)
+                {
+                    for (int x = 0; x < res; x++, ti += 6, vi++)
+                    {
+                        var tris = chunksBuffer[chunksIndex].triangles;
+
+                        tris[ti] = vi;
+                        tris[ti + 3] = tris[ti + 2] = vi + 1;
+                        tris[ti + 4] = tris[ti + 1] = vi + res + 1;
+                        tris[ti + 5] = vi + res + 2;
                     }
                 }
 
@@ -92,13 +105,19 @@ public class EarthGenerator : MonoBehaviour
         Debug.Log("finished creating mesh");
         for (int i = 0; i < chunksBuffer.Length; i++)
         {
-            Debug.Log("array " + i);
-            Debug.Log($"lenght of array: " + chunksBuffer[i].vertices.Length);
-            for (int j = 0; j < chunksBuffer[i].vertices.Length; j++)
+            // Debug.Log("array " + i);
+            // Debug.Log($"lenght of array: " + chunksBuffer[i].vertices.Length);
+            // for (int j = 0; j < chunksBuffer[i].vertices.Length; j++)
+            // {
+            //     Debug.Log(chunksBuffer[i].vertices[j]);
+            // }
+
+            for (int j = 0; j < chunksBuffer[i].triangles.Length; j++)
             {
-                Debug.Log(chunksBuffer[i].vertices[j]);
+                Debug.Log(chunksBuffer[i].triangles[j]);
             }
         }
+
     }
 }
 
