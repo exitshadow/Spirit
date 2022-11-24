@@ -660,7 +660,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _meshHolder: {fileID: 1190604069}
-  _subdivisions: 1
+  _subdivisions: 4
   _baseResolution: 4
 --- !u!4 &2011300623
 Transform:

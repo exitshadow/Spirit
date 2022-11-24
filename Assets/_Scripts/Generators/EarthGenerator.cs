@@ -8,7 +8,7 @@ public class EarthGenerator : MonoBehaviour
     [SerializeField] private int _subdivisions = 1;
     [SerializeField] private int _baseResolution = 2;
 
-    private List<ChunkData> chunksList = new List<ChunkData>();
+    private List<GameObject> chunksList = new List<GameObject>();
     private ChunkData[] chunksBuffer;
 
     // todo
@@ -27,10 +27,16 @@ public class EarthGenerator : MonoBehaviour
         if (chunksBuffer == null) return;
 
         Gizmos.color = Color.red;
+        
         for (int i = 0; i < chunksBuffer.Length; i++)
         {
-            if (chunksBuffer[i] == null) return;
-            //Debug.Log("Found chunk buffer");
+            Debug.Log($"chunksBuffer lenght: {chunksBuffer.Length}");
+            Debug.Log(i);
+            if (chunksBuffer[i] == null)
+            {
+                Debug.Log("Could not find chunks buffer");
+                return;
+            }
             
             for (int j = 0; j < chunksBuffer[i].vertices.Length; j++)
             {
@@ -49,26 +55,38 @@ public class EarthGenerator : MonoBehaviour
         float chunkResStep = chunkSize / res;   // the distance between vertices in a chunk
 
         chunksBuffer = new ChunkData[subDivs * subDivs];
+        Debug.Log(chunksBuffer.Length);
 
         // iterate in the number of chunks to make
-        for (int i = 0; i < chunksBuffer.Length; i++)
+        int chunksIndex = 0;
+        Vector2 rootIndex = Vector2.zero;
+        for (int u = 0; u < subDivs; u++)
         {
-            chunksBuffer[i] = new ChunkData(new Vector3[nbVerts], new int[nbVerts]);
-
-            int index = 0;
-            for (int x = 0; x <= res; x++)
+            for (int v = 0; v < subDivs; v++)
             {
-                for (int y = 0; y <= res; y++)
-                {
-                    float distX = i * x + chunkResStep * x;
-                    float distY = i * y + chunkResStep * y;
-                    chunksBuffer[i].vertices[index] = new Vector3(distX, distY, size / 2);
-                    Debug.Log(chunksBuffer[i].vertices[index] + " " + index);
-                    index++;
+                chunksBuffer[chunksIndex] = new ChunkData(new Vector3[nbVerts], new int[nbVerts]);
+                Debug.Log("chunks index: " + chunksIndex);
 
-                    yield return new WaitForSeconds(0.1f);
+                // generating vertices
+                int vertsIndex = 0;
+                for (int x = 0; x <= res; x++)
+                {
+                    for (int y = 0; y <= res; y++)
+                    {
+                        float distX = rootIndex.x + chunkResStep * x;
+                        float distY = rootIndex.y + chunkResStep * y;
+                        chunksBuffer[chunksIndex].vertices[vertsIndex] = new Vector3(distX, distY, size / 2);
+                        Debug.Log(chunksBuffer[chunksIndex].vertices[vertsIndex] + " " + vertsIndex);
+                        vertsIndex++;
+                        yield return new WaitForSeconds(0.1f);
+                    }
                 }
+
+                chunksIndex++;
+                rootIndex.y += chunkSize;
+                if (rootIndex.y > chunkSize * (subDivs - 1)) rootIndex.y = 0; 
             }
+            rootIndex.x += chunkSize;
         }
 
         Debug.Log("finished creating mesh");
