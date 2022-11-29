@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 1118.4556, g: 1293.1494, b: 1835.3965, a: 1}
+  m_IndirectSpecularColor: {r: 1114.5657, g: 1291.2549, b: 1840.1602, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -174,7 +174,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -194,7 +194,7 @@ Canvas:
   m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
@@ -337,7 +337,7 @@ MonoBehaviour:
   m_InnerSpotPercent: 0
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
-  m_VolumetricDimmer: 4.53
+  m_VolumetricDimmer: 6.4
   m_LightUnit: 2
   m_FadeDistance: 10000
   m_VolumetricFadeDistance: 10000
@@ -637,7 +637,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 236769291}
-  m_LocalRotation: {x: 0.43371657, y: 0.003957303, z: -0.0019048547, w: 0.90103865}
+  m_LocalRotation: {x: 0.43371657, y: 0.00395731, z: -0.0019048583, w: 0.90103865}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -714,6 +714,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da518bb2426d7c74c99e104a97026637, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _volume: {fileID: 432432460}
+  _nukeLight: {fileID: 950536025}
+  _sunLight: {fileID: 157207113}
   _flashCurve:
     serializedVersion: 2
     m_Curve:
@@ -908,7 +911,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771836194}
-  m_LocalRotation: {x: 0.48476383, y: 0.0038413787, z: -0.0021290747, w: 0.8746341}
+  m_LocalRotation: {x: 0.48476383, y: 0.003841344, z: -0.0021290556, w: 0.8746341}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -917,6 +920,12 @@ Transform:
   m_Father: {fileID: 1543877258}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &892048466 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7349358121960523244, guid: 4885cbe2cd50b644cbe7afea36b690d6,
+    type: 3}
+  m_PrefabInstance: {fileID: 2464818047654737657}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &947472496
 GameObject:
   m_ObjectHideFlags: 3
@@ -993,7 +1002,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 947472496}
-  m_LocalRotation: {x: 0.45934534, y: 0.0039011603, z: -0.0020174342, w: 0.88824695}
+  m_LocalRotation: {x: 0.45934534, y: 0.0039011675, z: -0.002017438, w: 0.88824695}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1038,10 +1047,10 @@ MonoBehaviour:
   m_InnerSpotPercent: 0
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
-  m_VolumetricDimmer: 6
+  m_VolumetricDimmer: 7.3
   m_LightUnit: 0
   m_FadeDistance: 10000
-  m_VolumetricFadeDistance: 10176.42
+  m_VolumetricFadeDistance: 9496.41
   m_AffectDiffuse: 1
   m_AffectSpecular: 1
   m_NonLightmappedOnly: 0
@@ -1211,13 +1220,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 950536023}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 6100, z: -51}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3.9130435, y: 3.3237681, z: 0.68743074}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_Father: {fileID: 892048466}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1003974149
 GameObject:
@@ -2007,7 +2016,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1543877256}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.4391874, y: 6180, z: -49.99807}
+  m_LocalPosition: {x: -0.43918824, y: 6180, z: -49.99807}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2281,8 +2290,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823688464}
-  m_LocalRotation: {x: 0.45934537, y: 0.0039011755, z: -0.0020174421, w: 0.88824695}
-  m_LocalPosition: {x: -0.4391874, y: 6180, z: -49.99807}
+  m_LocalRotation: {x: 0.45934537, y: 0.0039011827, z: -0.002017446, w: 0.88824695}
+  m_LocalPosition: {x: -0.43918824, y: 6180, z: -49.99807}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2843,10 +2852,64 @@ MonoBehaviour:
   _snippetsList: {fileID: 11400000, guid: ad1befbe283f9c644a3b4347c3472a98, type: 2}
   _TMPFieldToFill: {fileID: 1602218253}
   _timeToWaitBeforeStart: 5
-  _fadingTimeIn: 0.3
+  _fadingTimeIn: 0.1
   _fadingCurveIn:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.011001587
+      value: 0.106910706
+      inSlope: 4.9465528
+      outSlope: 4.9465528
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.09943226
+    - serializedVersion: 3
+      time: 0.26014718
+      value: 0.11957328
+      inSlope: 0.109917484
+      outSlope: 0.109917484
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.21810079
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.72908723
+      value: 0.3750773
+      inSlope: 2.4936945
+      outSlope: 2.4936945
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.051829793
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.749768
+      value: 0.12719697
+      inSlope: 1.4279709
+      outSlope: 1.4279709
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.8389466
+      value: 0.8535494
+      inSlope: 1.9873235
+      outSlope: 1.9873235
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.8176131
+      outWeight: 0.19923058
+    - serializedVersion: 3
+      time: 0.9914551
+      value: 0.97480774
+      inSlope: 3.637335
+      outSlope: 3.637335
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.044853047
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -2864,8 +2927,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.113792524
-      value: 0.86788285
+      time: 0.021675214
+      value: 0.8797313
       inSlope: 7.880232
       outSlope: 7.880232
       tangentMode: 0
@@ -2882,8 +2945,17 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.04451648
     - serializedVersion: 3
-      time: 0.9914551
-      value: 0.002357483
+      time: 0.35798714
+      value: 0.22912635
+      inSlope: -1.4888179
+      outSlope: -1.4888179
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.29862633
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.99874467
+      value: -0.004753113
       inSlope: -0.049470525
       outSlope: -0.049470525
       tangentMode: 0

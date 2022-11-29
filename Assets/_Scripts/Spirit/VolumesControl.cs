@@ -8,16 +8,21 @@ using UnityEngine.Rendering.HighDefinition;
 [RequireComponent(typeof(Volume))]
 public class VolumesControl : MonoBehaviour
 {
+    [SerializeField] private Volume _volume;
+    [SerializeField] private Light _nukeLight;
+    [SerializeField] private Light _sunLight;
     [SerializeField] private AnimationCurve _flashCurve;
     [SerializeField] private float _explosionTime = 10;
     [Range(0.5f, 3f)] [SerializeField] private float _intensityMultiplier = 1.5f;
 
-    private Volume volume;
     private VolumeProfile profile;
     private LiftGammaGain lgg;
     private Vector4 liftVal;
     private Vector4 gammaVal;
     private Vector4 gainVal;
+
+    private float nukeLightMaxIntensity;
+    private float sunLightMaxIntensity;
 
     private float startTime;
     private float endTime;
@@ -38,16 +43,24 @@ public class VolumesControl : MonoBehaviour
         Debug.Log(endTime);
         hasExploded = true;
         EnableLGG(true);
+        _nukeLight.enabled = true;
     }
 #endregion
 
 #region unity messages
     private void Start()
     {
-        volume = GetComponent<Volume>();
-        profile = volume.sharedProfile;
+        _volume = GetComponent<Volume>();
+        profile = _volume.sharedProfile;
 
         LGGSetup();
+
+        sunLightMaxIntensity = _sunLight.intensity;
+        nukeLightMaxIntensity = _nukeLight.intensity;
+        Debug.Log("sun light max intensity: " + sunLightMaxIntensity);
+        Debug.Log("nuke light max intensity: " + nukeLightMaxIntensity);
+        _nukeLight.intensity = 0;
+
     }
 
     private void Update()
@@ -68,8 +81,8 @@ public class VolumesControl : MonoBehaviour
     {
         float t = MathUtils.InverseLerp(startTime, endTime, Time.time);
         float intensity = _flashCurve.Evaluate(t);
-        Debug.Log("time on curve: " + t);
-        Debug.Log("intensity: " + intensity);
+        //Debug.Log("time on curve: " + t);
+        //Debug.Log("intensity: " + intensity);
 
 
         // retrieves initial settings and interpolates along animation curve
@@ -77,10 +90,16 @@ public class VolumesControl : MonoBehaviour
         lgg.gamma.value = gammaVal * intensity * _intensityMultiplier;
         lgg.gain.value = gainVal * intensity * _intensityMultiplier;
 
+        _nukeLight.intensity = nukeLightMaxIntensity * intensity;
+        _sunLight.intensity = sunLightMaxIntensity * (1 - intensity);
+        Debug.Log(_nukeLight.intensity);
+
         if (t > 1)
         {
             ResetLGGValues();
             EnableLGG(false);
+            _nukeLight.intensity = 0;
+            _sunLight.intensity = sunLightMaxIntensity;
             isOver = true;
         }
     }
