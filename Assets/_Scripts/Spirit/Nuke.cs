@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(AudioSource))]
 public class Nuke : MonoBehaviour
 {
     [SerializeField] private Transform _earthTransform;
     [SerializeField] private float _earthSurfaceRadius = 6000;
     [SerializeField] private float _dropSpeed = 200f;
+    [SerializeField] private AudioSource _explosionSound;
+    [SerializeField] private float _timeBeforeSound = 3f;
     public UnityEvent Boom;
 
     private float startSpeed;
@@ -52,7 +55,19 @@ public class Nuke : MonoBehaviour
         {
             Debug.Log("Boom");
             Boom?.Invoke();
+            StartCoroutine(WaitAndBlast(_timeBeforeSound));
             hasLanded = true;
+        }
+    }
+
+    private IEnumerator WaitAndBlast(float waitingTime)
+    {
+        Debug.Log("entering bomb sound delay coroutine");
+        yield return new WaitForSeconds(waitingTime);
+        if (_explosionSound != null)
+        {
+            _explosionSound.Play();
+            Debug.Log("playing detonation sound");
         }
     }
 }

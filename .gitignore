@@ -7,6 +7,9 @@ Build/
 Builds/
 Resources/Images/
 Logs/
+Recordings/
+Assets/TMP/
+UserSettings/Layouts/
 
 # =================
 # Blender generated
@@ -50,8 +53,6 @@ Thumbs.db
 delete.me.meta
 achievements_data.bytes*
 *.mo
-Recordings/
-Assets/TMP/
 
 
 # ======
