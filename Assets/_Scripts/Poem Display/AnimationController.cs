@@ -5,6 +5,7 @@ using TMPro;
 
 public class AnimationController : MonoBehaviour
 {
+    [SerializeField] private GameManager _manager;
     [SerializeField] private SnippetsList _snippetsList;
     [SerializeField] private TextMeshProUGUI _TMPFieldToFill;
     [SerializeField] private float _timeToWaitBeforeStart;
@@ -37,6 +38,8 @@ public class AnimationController : MonoBehaviour
 
     IEnumerator DisplaySnippet()
     {
+        _manager.IsPoemRunning = true;
+        
         // waits for time
         if (!hasStarted)
         {
@@ -92,5 +95,7 @@ public class AnimationController : MonoBehaviour
             // waits its waiting time
             yield return new WaitForSeconds(_snippets[i].WaitingTime);
         }
+
+        _manager.IsPoemRunning = false;
     }
 }

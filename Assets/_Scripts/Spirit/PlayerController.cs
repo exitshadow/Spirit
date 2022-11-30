@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
+    [Header("Manager Reference")]
+    [SerializeField] private GameManager _manager;
+
     [Header("Nuclear Device")]
     [SerializeField] private Nuke _nuke;
 
@@ -51,7 +54,7 @@ public class PlayerController : MonoBehaviour
 
     public void Nuke()
     {
-        if (_nuke != null)
+        if (_nuke != null && !_manager.IsPoemRunning)
         _nuke.Launch(_cruisingSpeed);
     }
 
