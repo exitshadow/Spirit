@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a99f7de31df78bc4e982a3dc153f3e94, type: 3}
   m_Name: 14_ all that counts
   m_EditorClassIdentifier: 
-  _content: "because that\u2019s all that counts"
+  _content: because that's all that counts
   _displayTime: 5
   _waitingTime: 8
