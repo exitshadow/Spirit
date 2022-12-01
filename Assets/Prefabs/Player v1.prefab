@@ -47,17 +47,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1d0f8bf848bb5d48816d8de19534fa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _manager: {fileID: 0}
   _nuke: {fileID: 2464818047654737660}
   _rotationTarget: {fileID: 0}
   _cruisingSpeed: 0.05
+  _steeringCurveIn:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _steeringSpeed: 0.05
   _rotationSpeed: 0.02
-  _steeringBackSpeed: 15
+  _steeringCurveOut:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _steeringBackDuration: 15
   _maxLateralAngle: 35
+  _tiltingCurveIn:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _tiltingSpeed: 0.0195
-  _frontRotationSpeed: 0.0138
-  _tiltingBackSpeed: 5
+  _altitudeShiftSpeed: 1
+  _tiltingCurveOut:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _tiltingBackDuration: 15
   _maxFrontalAngle: 15
+  isOrbitOn: 1
+  isSteeringOn: 1
+  isTiltingOn: 1
 --- !u!114 &2464818047911473153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,6 +194,7 @@ GameObject:
   - component: {fileID: 8427065050061599188}
   - component: {fileID: 8596501426367012621}
   - component: {fileID: 2464818047654737659}
+  - component: {fileID: 8213920983345124845}
   - component: {fileID: 2464818047654737660}
   m_Layer: 0
   m_Name: Nuke
@@ -269,6 +298,102 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
+--- !u!82 &8213920983345124845
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3591183656414439465}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &2464818047654737660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,6 +406,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b1ef50cf5de48c4e8dc0ab6ecb49d1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _manager: {fileID: 0}
+  _earthTransform: {fileID: 0}
+  _earthSurfaceRadius: 6000
+  _dropSpeed: 200
+  _explosionSound: {fileID: 0}
+  _timeBeforeSound: 3
   Boom:
     m_PersistentCalls:
       m_Calls:
@@ -296,7 +427,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _earthSurfaceRadius: 6000
 --- !u!1001 &2464818049592401720
 PrefabInstance:
   m_ObjectHideFlags: 0
