@@ -55,6 +55,7 @@ public class AnimationController : MonoBehaviour
     private IEnumerator DisplayTitleScreen()
     {
         // setup
+        _titleScreenHolder.SetActive(true);
         _titleScreenTMP.alpha = 0;
         yield return new WaitForSeconds(_titleScreenWaitingTime);
 
