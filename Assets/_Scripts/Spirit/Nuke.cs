@@ -6,6 +6,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(AudioSource))]
 public class Nuke : MonoBehaviour
 {
+    [SerializeField] private GameManager _manager;
     [SerializeField] private Transform _earthTransform;
     [SerializeField] private float _earthSurfaceRadius = 6000;
     [SerializeField] private float _dropSpeed = 200f;
@@ -68,6 +69,13 @@ public class Nuke : MonoBehaviour
         {
             _explosionSound.Play();
             Debug.Log("playing detonation sound");
+
+            while (_explosionSound.isPlaying)
+            {
+                yield return null;
+            }
+
+            _manager.Next();
         }
     }
 }
