@@ -6,13 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public bool IsPoemRunning;
     [SerializeField] private SceneListManagementSO _scenes;
-    [SerializeField] private string currentScene;
+    private string currentScene;
     private string nextScene;
+    public bool IsPoemRunning;
 
     private void Start()
     {
+        currentScene = SceneManager.GetActiveScene().name;
+
         for (int i = 0; i < _scenes.ScenesList.Count; i++)
         {
             if (currentScene == _scenes.ScenesList[i])
@@ -21,9 +23,9 @@ public class GameManager : MonoBehaviour
                 {
                     nextScene = _scenes.ScenesList[i + 1];
                 }
-                catch (IndexOutOfRangeException e)
+                catch (ArgumentOutOfRangeException e)
                 {
-                    Debug.Log($"{e.Message}: You have reached the end. Program will now load the title screen.");
+                    Debug.Log($"{e.Message} - All these words means you have reached the end. Program will load the title screen.");
                     nextScene = "MENU";
                 }
 
