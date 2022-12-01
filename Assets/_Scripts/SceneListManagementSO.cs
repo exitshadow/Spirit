@@ -6,4 +6,6 @@ using UnityEngine;
 public class SceneListManagementSO : ScriptableObject
 {
     [SerializeField] private List<string> _scenesList;
+
+    public List<string> ScenesList { get { return _scenesList; } }
 }
