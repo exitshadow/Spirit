@@ -12,12 +12,12 @@ public class Nuke : MonoBehaviour
     [SerializeField] private float _dropSpeed = 200f;
     [SerializeField] private AudioSource _explosionSound;
     [SerializeField] private float _timeBeforeSound = 3f;
-    public UnityEvent Boom;
+    public UnityEvent OnExplosion;
+    public UnityEvent OnFalloffEnd;
 
     private float startSpeed;
     private bool hasLaunched = false;
     private bool hasLanded = false;
-
 
     public void Launch(float speed)
     {
@@ -55,7 +55,7 @@ public class Nuke : MonoBehaviour
         if (dist < _earthSurfaceRadius && !hasLanded)
         {
             Debug.Log("Boom");
-            Boom?.Invoke();
+            OnExplosion?.Invoke();
             StartCoroutine(WaitAndBlast(_timeBeforeSound));
             hasLanded = true;
         }
@@ -75,7 +75,7 @@ public class Nuke : MonoBehaviour
                 yield return null;
             }
 
-            _manager.Next();
+            OnFalloffEnd?.Invoke();
         }
     }
 }

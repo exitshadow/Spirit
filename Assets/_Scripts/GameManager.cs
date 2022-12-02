@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void Next()
+    public void LoadNextScene()
     {
         SceneManager.LoadScene(nextScene);
     }
