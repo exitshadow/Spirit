@@ -71,7 +71,6 @@ public class AnimationController : MonoBehaviour
     [SerializeField] private AnimationCurve _sceneFadeOutCurve;
 
     private List<PoemSnippet> _snippets;
-    bool isFading = false;
 
     public void StartEndFade()
     {
@@ -102,34 +101,30 @@ public class AnimationController : MonoBehaviour
             yield return new WaitForSeconds(_titleScreenWaitingTime);
 
             // fade text in
-            StartCoroutine(FadeTarget(  _titleScreenTMP.gameObject,
-                                        _titleTextFadeInDuration,
-                                        _titleTextFadeInCurve));
-            while (isFading) yield return null;
-
+            yield return StartCoroutine(FadeTarget( _titleScreenTMP.gameObject,
+                                                    _titleTextFadeInDuration,
+                                                    _titleTextFadeInCurve));
 
             // hold text
             yield return new WaitForSeconds(_titleTextHoldDuration);
 
             // sync sound in and text out
             // fade text out
-            StartCoroutine(FadeTarget(  _titleScreenTMP.gameObject,
+            StartCoroutine(FadeTarget( _titleScreenTMP.gameObject,
                                         _titleTextFadeOutDuration,
                                         _titleTextFadeOutCurve));
             // fade sound in
-            StartCoroutine(FadeTarget( _audioSource.gameObject,
-                                        _titleTextFadeOutDuration, // this has to be in sync
-                                        _audioFadeInCurve));
-            while (isFading) yield return null;
+            yield return StartCoroutine(FadeTarget( _audioSource.gameObject,
+                                                    _titleTextFadeOutDuration, // this has to be in sync
+                                                    _audioFadeInCurve));
 
             // hold empty background
             yield return new WaitForSeconds(_emptyTextHoldDuration);
 
             // fade background out
-            StartCoroutine(FadeTarget(  _titleScreenBackground.gameObject,
-                                        _titleScreenFadeOutDuration,
-                                        _titleScreenFadeOutCurve));
-            while (isFading) yield return null;
+            yield return StartCoroutine(FadeTarget( _titleScreenBackground.gameObject,
+                                                    _titleScreenFadeOutDuration,
+                                                    _titleScreenFadeOutCurve));
 
             _titleScreenHolder.SetActive(false);
         }
@@ -149,19 +144,17 @@ public class AnimationController : MonoBehaviour
                 _TMPFieldToFill.text = _snippets[i].Content;
 
                 // fade in
-                StartCoroutine(FadeTarget(  _TMPFieldToFill.gameObject,
+                yield return StartCoroutine(FadeTarget(  _TMPFieldToFill.gameObject,
                                             _fadingTimeIn,
                                             _fadingCurveIn));
-                while (isFading) yield return null;
 
                 // waits its display time
                 yield return new WaitForSeconds(_snippets[i].DisplayTime);
 
                 // fade out
-                StartCoroutine(FadeTarget(  _TMPFieldToFill.gameObject,
+                yield return StartCoroutine(FadeTarget(  _TMPFieldToFill.gameObject,
                                             _fadingTimeOut,
                                             _fadingCurveOut));
-                while (isFading) yield return null;
 
                 // masks it
                 _TMPFieldToFill.text = "";
@@ -185,19 +178,17 @@ public class AnimationController : MonoBehaviour
             _TMPTriggerText.alpha = 0;
 
             // fade in
-            StartCoroutine(FadeTarget(  _TMPTriggerText.gameObject,
+            yield return StartCoroutine(FadeTarget(  _TMPTriggerText.gameObject,
                                         _triggerTextFadingTimeIn,
                                         _triggerTextFadingCurveIn));
-            while (isFading) yield return null;
 
             // hold
             yield return new WaitForSeconds(_triggerTextDuration);
 
             // fade out
-            StartCoroutine(FadeTarget(  _TMPTriggerText.gameObject,
+            yield return StartCoroutine(FadeTarget(  _TMPTriggerText.gameObject,
                                         _triggerTextFadingTimeOut,
                                         _triggerTextFadingCurveOut));
-            while (isFading) yield return null;
 
             // disables
             _TMPTriggerText.gameObject.SetActive(false);
@@ -205,7 +196,7 @@ public class AnimationController : MonoBehaviour
     }
     
     private IEnumerator FadeAndChangeScene()
-    {
+    {        
         yield return new WaitForSeconds(_sceneHoldingTimeBefore);
 
         // setup
@@ -217,29 +208,28 @@ public class AnimationController : MonoBehaviour
         StartCoroutine(FadeTarget(  _titleScreenBackground.gameObject,
                                     _sceneFadeOutTime,
                                     _sceneFadeOutCurve));
-        StartCoroutine(FadeTarget(  _audioSource.gameObject,
-                                    _sceneFadeOutTime,      // has to be in sync!
-                                    _audioFadeOutCurve));
-        while (isFading) yield return null;
+        yield return StartCoroutine(FadeTarget( _audioSource.gameObject,
+                                                _sceneFadeOutTime,      // has to be in sync!
+                                                _audioFadeOutCurve));
 
         yield return new WaitForSeconds(_sceneHoldingTimeAfter);
 
         _manager.LoadNextScene();
     }
 
-    private IEnumerator FadeTarget(GameObject target, float duration, AnimationCurve curve)
+    public static IEnumerator FadeTarget(GameObject target, float duration, AnimationCurve curve)
     {
         Debug.Log($"Starting fading target: {target.name}");
 
         float timeStart = Time.time;
         float timeEnd = timeStart + duration;
-        isFading = true;
+        bool isFadingHere = true;
 
         var tmpTarget = target.GetComponent<TextMeshProUGUI>();
         var imgTarget = target.GetComponent<ProceduralImage>();
         var audioTarget = target.GetComponent<AudioSource>();
 
-        while (isFading)
+        while (isFadingHere)
         {
             float t = MathUtils.InverseLerp(timeStart, timeEnd, Time.time);
 
@@ -253,7 +243,7 @@ public class AnimationController : MonoBehaviour
             if (audioTarget != null)
                 audioTarget.volume = curve.Evaluate(t);
 
-            if (Time.time > timeEnd) isFading = false;
+            if (Time.time > timeEnd) isFadingHere = false;
             yield return null;
         }
         
