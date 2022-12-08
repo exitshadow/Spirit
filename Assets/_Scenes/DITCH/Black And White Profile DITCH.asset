@@ -370,10 +370,10 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 0
   windOrientation:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 235
   windSpeed:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 107.26
   fogType:
     m_OverrideState: 1
@@ -502,8 +502,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 55261.973
   aerosolDensity:
-    m_OverrideState: 1
-    m_Value: 0.912
+    m_OverrideState: 0
+    m_Value: 0.06
   aerosolTint:
     m_OverrideState: 0
     m_Value: {r: 0.9, g: 0.9, b: 0.9, a: 1}
@@ -517,7 +517,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 8
   groundTint:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {r: 0.12423077, g: 0.12423077, b: 0.17, a: 1}
   groundColorTexture:
     m_OverrideState: 0
@@ -556,7 +556,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   horizonZenithShift:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.28
   m_SkyVersion: 1
   m_ObsoleteEarthPreset:
@@ -577,7 +577,7 @@ MonoBehaviour:
   active: 1
   quality:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   enabled:
     m_OverrideState: 1
     m_Value: 1
@@ -586,7 +586,7 @@ MonoBehaviour:
     m_Value: 0
   color:
     m_OverrideState: 1
-    m_Value: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    m_Value: {r: 0.0627451, g: 0.0627451, b: 0.0627451, a: 1}
   tint:
     m_OverrideState: 1
     m_Value: {r: 1, g: 1, b: 1, a: 1}
@@ -625,7 +625,7 @@ MonoBehaviour:
     m_Value: 64
   denoisingMode:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 0
   anisotropy:
     m_OverrideState: 0
     m_Value: 0
@@ -643,7 +643,7 @@ MonoBehaviour:
     m_Value: 64
   m_VolumetricFogBudget:
     m_OverrideState: 1
-    m_Value: 0.5
+    m_Value: 0.25
   m_ResolutionDepthRatio:
     m_OverrideState: 1
     m_Value: 0.5
