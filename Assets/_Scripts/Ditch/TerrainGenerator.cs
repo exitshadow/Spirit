@@ -7,6 +7,8 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField] private Transform _player;
     [SerializeField] private GameObject _previewPrefab;
     [SerializeField] private Mesh _sliceMesh;
+    [SerializeField] private StencilShape _stencilShape;
+    [SerializeField] private float _valleyHalfDistance = 20f;
     [SerializeField] private int _maxDistX;
     [SerializeField] private int _maxDistZ;
     [SerializeField] private int _resolution;
@@ -17,9 +19,14 @@ public class TerrainGenerator : MonoBehaviour
     private Hashtable chunksContainer = new Hashtable();
     private List<Vector3> chunksPositions = new List<Vector3>();
 
+    private StencilShape symmetricStencil;
+
     private void Start()
     {
         step = _maxDistX / _resolution;
+        symmetricStencil = SymmetrizeStencil(_stencilShape);
+        symmetricStencil.ScaleX(_valleyHalfDistance);
+
 
         if (_sliceMesh == null)
         {
@@ -80,6 +87,21 @@ public class TerrainGenerator : MonoBehaviour
                 GameObject dummy = Instantiate(_previewPrefab, position, Quaternion.identity);
             }
         }
+    }
+
+    private StencilShape SymmetrizeStencil(StencilShape halfStencil)
+    {
+        List<Vector2> stencilPoints = halfStencil.GetPositions();
+        List<Vector2> symmetricPoints = new List<Vector2>(stencilPoints.Count * 2 - 1);
+
+        for (int i = 0; i < stencilPoints.Count; i++)
+        {
+            int mirrorIndex = stencilPoints.Count * 2 - i;
+            symmetricPoints[i] = stencilPoints[i];
+            symmetricPoints[mirrorIndex] = new Vector2(stencilPoints[i].x * -1, stencilPoints[i].y);
+        }
+
+        return new StencilShape(symmetricPoints);
     }
 
 }
