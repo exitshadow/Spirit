@@ -6,8 +6,9 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
-    [Header("Manager Reference")]
+    [Header("References")]
     [SerializeField] private GameManager _manager;
+    [SerializeField] private Animator _animator;
 
     [Header("Nuclear Device")]
     [SerializeField] private Nuke _nuke;
@@ -55,7 +56,23 @@ public class PlayerController : MonoBehaviour
     public void Nuke()
     {
         if (_nuke != null && !_manager.IsPoemRunning)
+        {
+            _animator.SetTrigger("Open");
+            StartCoroutine(WaitAndLaunch());
+        }
+    }
+
+    private IEnumerator WaitAndLaunch()
+    {
+        yield return new WaitForSeconds(1.5f); // todo wait for animation time + margin
         _nuke.Launch(_cruisingSpeed);
+        StartCoroutine(WaitAndClose());
+    }
+
+    private IEnumerator WaitAndClose()
+    {
+        yield return new WaitForSeconds(5f);
+        _animator.SetTrigger("Close");
     }
 
     private void Start()
@@ -95,9 +112,15 @@ public class PlayerController : MonoBehaviour
                 // evaluates players inputs and remaps according to the curve
                 float t;
                 if (direction.x > 0)
+                {
                     t = _steeringCurveIn.Evaluate(direction.x);
+                    _animator.SetTrigger("Left");
+                }
                 else
+                {
                     t = -_steeringCurveIn.Evaluate(-direction.x);
+                    _animator.SetTrigger("Right");
+                }
 
                 // multiplies the result by the speed and inverses controls
                 steering = _steeringSpeed * t * -1;
@@ -143,9 +166,15 @@ public class PlayerController : MonoBehaviour
 
             float t;
             if (direction.y > 0)
+            {
                 t = _tiltingCurveIn.Evaluate(direction.y);
+                _animator.SetTrigger("Up");
+            }
             else
+            {
                 t = -_tiltingCurveIn.Evaluate(-direction.y);
+                _animator.SetTrigger("Down");
+            }
 
             tilting = _tiltingSpeed * t;
 
